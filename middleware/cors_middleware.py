@@ -2,10 +2,11 @@ def validate_origin(origin, whitelist):
     return origin and origin in whitelist
 
 
-def cors_middleware(app):
+def cors_middleware(app, whitelist=None):
     print "CORS middleware applied."
 
-    whitelist = ['http://localhost:9000', 'http://localhost:9001']
+    if whitelist is None:
+        whitelist = []
 
     def cors_enabled_application(environ, start_response):
 
