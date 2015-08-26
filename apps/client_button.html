@@ -1,0 +1,24 @@
+<title>CORS Button</title>
+<style>
+    body {margin: 100px; text-align: center;}
+    button {cursor: pointer; font-size: 200%;}
+</style>
+
+<button>Send AJAX Request</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.min.js"></script>
+<script>
+  var btn = document.querySelector('button');
+  btn.addEventListener('click', function() {
+
+    superagent.get('http://localhost:8000')
+      .end(function(err, res) {
+        if (res && res.ok && res.body.success) {
+          alert('SUCCESS!!!!!!111 OMG \\o/');
+        } else {
+          alert('Request failed.');
+        }
+      });
+
+  });
+</script>
