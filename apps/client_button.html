@@ -4,21 +4,30 @@
     button {cursor: pointer; font-size: 200%;}
 </style>
 
-<button>Send AJAX Request</button>
+<p><button id="btn-get">Send AJAX Request</button></p>
+<p><button id="btn-post">POST Some JSON</button></p>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.min.js"></script>
 <script>
-  var btn = document.querySelector('button');
-  btn.addEventListener('click', function() {
+  var btnGET = document.querySelector('#btn-get');
+  var btnPOST = document.querySelector('#btn-post');
 
-    superagent.get('http://localhost:8000')
-      .end(function(err, res) {
-        if (res && res.ok && res.body.success) {
-          alert('SUCCESS!!!!!!111 OMG \\o/');
-        } else {
-          alert('Request failed.');
-        }
-      });
+  var didSucceed = function(err, res) {
+    if (res && res.ok && res.body.success) {
+        alert('SUCCESS!!!!!!111 OMG \\o/');
+    } else {
+        alert('Request failed.');
+    }
+  };
 
+  btnGET.addEventListener('click', function() {
+    superagent.get('http://localhost:8000').end(didSucceed);
+  });
+
+  btnPOST.addEventListener('click', function() {
+    superagent.post('http://localhost:8000')
+      .set('Content-Type', 'application/json')
+      .send('{"update": "thing"}')
+      .end(didSucceed);
   });
 </script>
