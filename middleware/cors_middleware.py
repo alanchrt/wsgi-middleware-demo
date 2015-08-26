@@ -20,11 +20,29 @@ class CORSMiddleware(object):
 
         return cors_allowed_response
 
+    def cors_options_app(self, origin, environ, start_response):
+        """A small wsgi app that responds to preflight requests for the
+        specified origin."""
+        response_body = 'ok'
+        status = '200 OK'
+        response_headers = [
+            ('Content-Type', 'text/plain'),
+            ('Content-Length', str(len(response_body))),
+            ('Access-Control-Allow-Origin', origin),
+            ('Access-Control-Allow-Headers', 'Content-Type'),
+        ]
+        start_response(status, response_headers)
+        return [response_body]
+
     def __call__(self, environ, start_response):
         """Handle an individual request."""
         origin = environ.get('HTTP_ORIGIN')
 
         if self.validate_origin(origin):
+            method = environ.get('REQUEST_METHOD')
+            if method == 'OPTIONS':
+                return self.cors_options_app(origin, environ, start_response)
+
             return self.app(
                 environ, self.cors_response_factory(origin, start_response))
         else:
