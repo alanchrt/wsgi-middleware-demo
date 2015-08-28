@@ -11,6 +11,6 @@ class ResponseTimingMiddleware(object):
         """Meaure the time spent in the application."""
         start_time = time.time()
         response = self.app(environ, start_response)
-        response_time = (time.time() - start_time) / 1000
+        response_time = (time.time() - start_time) * 1000
         print "Response time: {:.10f}ms".format(response_time)
         return response
